@@ -1,0 +1,43 @@
+{
+  "name": "perso-sdk",
+  "version": "0.1.0",
+  "description": "Node.js SDK for the perso WebAssembly policy enforcement engine",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:wasm": "PERSO_WASM=path/to/perso.wasm vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src tests"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "perso",
+    "policy",
+    "wasm",
+    "mcp",
+    "authorization",
+    "access-control"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  }
+}

@@ -1,0 +1,6 @@
+export { Perso } from './perso.js'
+export type { PersoOptions, EvaluateInput, Decision } from './types.js'
+export type { AuditEvent, AuditTransport } from './audit/types.js'
+export { consoleTransport } from './audit/transports/console.js'
+export { httpTransport } from './audit/transports/http.js'
+export { fileTransport } from './audit/transports/file.js'

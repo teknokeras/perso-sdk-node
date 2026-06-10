@@ -2,7 +2,6 @@ import { existsSync, readFileSync } from 'fs'
 import { randomUUID } from 'crypto'
 import { WasmBridge } from './wasm.js'
 import { AuditEmitter } from './audit/emitter.js'
-import { consoleTransport } from './audit/transports/console.js'
 import type { EvaluateInput, Decision, PersoOptions } from './types.js'
 
 export class Perso {
@@ -24,7 +23,7 @@ export class Perso {
     wasm.init(policyJson)
 
     const auditEnabled = options.audit?.enabled ?? true
-    const transport = options.audit?.transport ?? consoleTransport()
+    const transport = options.audit?.transport ?? null
     const emitter = new AuditEmitter(
       auditEnabled ? transport : null,
       options.audit?.hashArgs ?? false,
@@ -62,5 +61,9 @@ export class Perso {
       ? readFileSync(policyJsonOrPath, 'utf8')
       : policyJsonOrPath
     this.wasm.init(policyJson)
+  }
+
+  get policyVersion(): string {
+    return this.wasm.policyVersion
   }
 }

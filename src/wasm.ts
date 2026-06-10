@@ -15,6 +15,7 @@ interface WasmExports {
 
 export class WasmBridge {
   private exports: WasmExports
+  policyVersion: string = 'unknown'
 
   private constructor(exports: WasmExports) {
     this.exports = exports
@@ -27,11 +28,17 @@ export class WasmBridge {
   }
 
   init(policyJson: string): void {
+    // Parse version on the SDK side — no need to touch Rust
+    const parsed = JSON.parse(policyJson) as Record<string, unknown>
+    this.policyVersion = typeof parsed['version'] === 'string'
+      ? parsed['version']
+      : 'unknown'
+
     const [ptr, len] = this.writeString(policyJson)
     const respPtr = this.exports.init(ptr, len)
     const resp = this.readResponse(respPtr)
-    if (!resp.ok) {
-      throw new Error(`perso init failed: ${resp.error ?? 'unknown error'}`)
+    if (!resp['ok']) {
+      throw new Error(`perso init failed: ${resp['error'] ?? 'unknown error'}`)
     }
   }
 

@@ -1,4 +1,4 @@
-import { createHash } from 'crypto'
+import { createHash, randomUUID } from 'crypto'
 import { VERSION } from '../version.js'
 import type { AuditEvent, AuditTransport } from './types.js'
 import type { EvaluateInput, Decision } from '../types.js'
@@ -6,6 +6,7 @@ import type { EvaluateInput, Decision } from '../types.js'
 interface EmitInput {
   input: EvaluateInput & { traceId: string }
   decision: Decision
+  policyVersion: string
 }
 
 export class AuditEmitter {
@@ -17,22 +18,24 @@ export class AuditEmitter {
     this.hashArgs = hashArgs
   }
 
-  async emit({ input, decision }: EmitInput): Promise<void> {
+  async emit({ input, decision, policyVersion }: EmitInput): Promise<void> {
     if (!this.transport) return
 
     const event: AuditEvent = {
-      timestamp: new Date().toISOString(),
+      id: randomUUID(),
       traceId: input.traceId,
+      timestamp: new Date().toISOString(),
       tool: input.tool,
-      role: input.role,
       args: this.hashArgs
         ? createHash('sha256').update(JSON.stringify(input.args)).digest('hex')
         : input.args,
+      role: input.role,
       agentAttributes: input.agentAttributes ?? {},
       resourceAttributes: input.resourceAttributes ?? {},
       decision: decision.decision,
       reason: decision.reason,
       sdkVersion: VERSION,
+      policyVersion,
     }
 
     try {

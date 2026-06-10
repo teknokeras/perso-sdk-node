@@ -9,8 +9,9 @@ vi.mock('fs/promises', () => ({
 import { appendFile } from 'fs/promises'
 
 const mockEvent: AuditEvent = {
-  timestamp: '2024-01-01T00:00:00.000Z',
+  id: 'evt-uuid-123',
   traceId: 'trace-123',
+  timestamp: '2024-01-01T00:00:00.000Z',
   tool: 'read_file',
   role: 'viewer',
   args: {},
@@ -19,6 +20,7 @@ const mockEvent: AuditEvent = {
   decision: 'Allow',
   reason: 'rule matched',
   sdkVersion: '0.1.0',
+  policyVersion: 'perso-1.0.0',
 }
 
 describe('fileTransport', () => {

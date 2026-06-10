@@ -14,12 +14,6 @@ export class Perso {
     this.emitter = emitter
   }
 
-  /**
-   * Load the perso WASM engine and initialise it with a policy.
-   *
-   * @param wasmPath - Path to the compiled perso.wasm binary
-   * @param options  - Policy source and audit configuration
-   */
   static async load(wasmPath: string, options: PersoOptions): Promise<Perso> {
     const wasm = await WasmBridge.load(wasmPath)
 
@@ -39,10 +33,6 @@ export class Perso {
     return new Perso(wasm, emitter)
   }
 
-  /**
-   * Evaluate a tool call against the loaded policy.
-   * An audit event is emitted automatically after every evaluation.
-   */
   async evaluate(input: EvaluateInput): Promise<Decision> {
     const traceId = input.traceId ?? randomUUID()
 
@@ -61,15 +51,12 @@ export class Perso {
     await this.emitter.emit({
       input: { ...input, traceId },
       decision,
+      policyVersion: this.wasm.policyVersion,
     })
 
     return decision
   }
 
-  /**
-   * Hot-reload the policy without restarting the host.
-   * Accepts a file path or a raw JSON string.
-   */
   reload(policyJsonOrPath: string): void {
     const policyJson = existsSync(policyJsonOrPath)
       ? readFileSync(policyJsonOrPath, 'utf8')

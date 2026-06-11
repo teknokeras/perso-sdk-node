@@ -23,6 +23,7 @@ export class Perso {
     wasm.init(policyJson)
 
     const auditEnabled = options.audit?.enabled ?? true
+    // No transport by default — callers must opt in explicitly
     const transport = options.audit?.transport ?? null
     const emitter = new AuditEmitter(
       auditEnabled ? transport : null,
@@ -56,6 +57,7 @@ export class Perso {
     return decision
   }
 
+  /** Hot-reload the policy without restarting the host. Accepts a file path or raw JSON string. */
   reload(policyJsonOrPath: string): void {
     const policyJson = existsSync(policyJsonOrPath)
       ? readFileSync(policyJsonOrPath, 'utf8')
@@ -63,6 +65,7 @@ export class Perso {
     this.wasm.init(policyJson)
   }
 
+  /** The version field from the currently loaded policy e.g. "perso-1.0.0" */
   get policyVersion(): string {
     return this.wasm.policyVersion
   }

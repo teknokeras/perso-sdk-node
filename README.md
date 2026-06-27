@@ -147,6 +147,38 @@ interface AuditEvent {
 }
 ```
 
+## Development
+
+Install dependencies:
+
+```bash
+pnpm install
+```
+
+Run the unit tests (no `.wasm` binary required):
+
+```bash
+pnpm test
+```
+
+Watch mode during development:
+
+```bash
+pnpm test:watch
+```
+
+Run integration tests against a real WASM binary:
+
+```bash
+PERSO_WASM=path/to/perso.wasm pnpm test:wasm
+```
+
+Build the TypeScript sources:
+
+```bash
+pnpm build
+```
+
 ## Requirements
 
 - Node.js 18+
